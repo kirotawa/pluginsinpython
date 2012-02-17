@@ -1,0 +1,23 @@
+
+<? xml version="1.0" enconding="UTF-8"?>
+<schemalist>
+    <schema id="rhythmbox.plugin.top10" path="/rhythmbox/plugin/top10/">
+        <key name="lastfmuser" type="s">
+            <default>''</default>
+            <summary>Name of user in lastfm account</summary>
+            <description>The name of user in lastfm account to get you statistics</description>
+        </key>
+
+        <key name="imagepath" type="s">
+            <default>'images/default.jpeg'</default>
+            <summary>Name of user in lastfm account</summary>
+            <description>The name of user in lastfm account to get you statistics</description>
+        </key>
+
+        <key name="period" type="s">
+            <default>'overall'</default>
+            <summary>Period by wich we get the user statistics</summary>
+            <description>Perido</description>
+        </key>
+    </schema>
+</schemalist>
