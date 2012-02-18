@@ -2,15 +2,16 @@
 
 import rb
 import os
-from gi.repository import GdkPixbuf, RB, Gtk, Gio, GObject, PeasGtk
-from threading import Thread    
 import urllib 
 import urllib2
+from threading import Thread    
 from BeautifulSoup import BeautifulSoup
+from gi.repository import GdkPixbuf, RB, Gtk, Gio, GObject, PeasGtk
+
 
 IMAGE_PATH = "/tmp/top10.jpeg"
-IMAGE_DEFAULT_PATH = "images/default.jpeg"
 IMAGE_LOAD_PATH = "images/loading.gif"
+IMAGE_DEFAULT_PATH = "images/default.jpeg"
 
 
 class Load(Thread):
