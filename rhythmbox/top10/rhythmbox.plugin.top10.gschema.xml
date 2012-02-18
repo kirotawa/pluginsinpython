@@ -9,7 +9,7 @@
         </key>
 
         <key name="imagepath" type="s">
-            <default>'images/default.jpeg'</default>
+            <default>'.local/share/rhythmbox/plugins/top10/images/default.jpeg'</default>
             <summary>Name of user in lastfm account</summary>
             <description>The name of user in lastfm account to get you statistics</description>
         </key>

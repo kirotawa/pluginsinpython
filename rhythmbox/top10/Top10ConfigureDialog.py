@@ -10,8 +10,8 @@ from gi.repository import GdkPixbuf, RB, Gtk, Gio, GObject, PeasGtk
 
 
 IMAGE_PATH = "/tmp/top10.jpeg"
-IMAGE_LOAD_PATH = "images/loading.gif"
-IMAGE_DEFAULT_PATH = "images/default.jpeg"
+IMAGE_LOAD_PATH = ".local/share/rhythmbox/plugins/top10/images/loading.gif"
+IMAGE_DEFAULT_PATH = ".local/share/rhythmbox/plugins/top10/images/default.jpeg"
 
 
 class Load(Thread):
