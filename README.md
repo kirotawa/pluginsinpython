@@ -1,6 +1,6 @@
 #  This 'project' contains some plugins made in Python ##
 
-###  Rhythmbox plugins
+##  Rhythmbox plugins
 
 ### Top 10 Last FM plugin
 
