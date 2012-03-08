@@ -1,14 +1,16 @@
-## This 'project' content some plugins made in Python ##
+## This 'project' contains some plugins made in Python ##
 
-    # Top 10 Last FM plugin #
+##Rhythmbox plugins
 
-        - Author: Leônidas S.B. kirotawa.
-        - version: 0.0.1
+###Top 10 Last FM plugin
 
-        - About: this a simple plugin to rhythmbox player. It get you lastfm top10 artists basead on a period and show a image in right side of you rhythmbox.
+    - Author: Leônidas S.B. kirotawa.
+    - version: 0.0.1
 
-    # How to install #
+    - About: this a simple plugin to rhythmbox player. It get you lastfm top10 artists basead on a period and show a image in right side of you rhythmbox.
 
-        - Like a root, run ./install.sh and enjoy!
+### How to install #
+
+    - Like a root, run ./install.sh and enjoy!
 
 
