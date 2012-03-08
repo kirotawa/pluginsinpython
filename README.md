@@ -12,6 +12,6 @@
 
 ### How to install #
 
-    - Like a root, run ./install.sh and enjoy!
+    - Like a root type ./install.sh and enjoy!
 
 
