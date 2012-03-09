@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 import Image
 import urllib
 import urllib2
@@ -10,12 +11,12 @@ from BeautifulSoup import BeautifulSoup
 # period:  overall | 7day | 3month | 6month | 12mont
 URL = 'http://ws.audioscrobbler.com/2.0/?method=user.gettopartists&user=%s&api_key=%s&period=%s&limit=10'
 API_KEY = '344245cb8610e8490d7abd82c980d191'
-BACKGROUND = Image.open('images/compound.jpeg') 
+BACKGROUND = Image.open('/home/%s/.local/share/rhythmbox/plugins/top10/images/compound.jpeg' % os.getlogin()) 
 IMAGE_TEMP_PATH = '/tmp/'
 DRAW = ImageDraw.Draw(BACKGROUND)
-FONT_RANK = ImageFont.truetype("/usr/share/fonts/truetype/unfonts/UnBatang.ttf", 25)
-FONT_INFO = ImageFont.truetype("/usr/share/fonts/truetype/unfonts/UnBatang.ttf", 12)
-FONT_ARTIST = ImageFont.truetype("/usr/share/fonts/truetype/unfonts/UnBatang.ttf", 16)
+FONT_RANK = ImageFont.truetype("/home/%s/.local/share/rhythmbox/plugins/top10/fonts/UnBatang.ttf", 25 % os.getlogin())
+FONT_INFO = ImageFont.truetype("/home/%s/.local/share/rhythmbox/plugins/top10/fonts/UnBatang.ttf", 12 % os.getlogin())
+FONT_ARTIST = ImageFont.truetype("/home/%s/.local/share/rhythmbox/plugins/top10/fonts/UnBatang.ttf", 16 % os.getlogin())
 
 
 def do_top10_image(nick, period):
