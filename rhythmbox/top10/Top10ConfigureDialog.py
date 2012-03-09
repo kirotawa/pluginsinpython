@@ -2,54 +2,36 @@
 
 import rb
 import os
-import urllib 
-import urllib2
+# import urllib 
+# import urllib2
 from threading import Thread    
-from BeautifulSoup import BeautifulSoup
+# from BeautifulSoup import BeautifulSoup
 from gi.repository import GdkPixbuf, RB, Gtk, Gio, GObject, PeasGtk
-
+from topimagegenerate import do_top10_image 
 
 IMAGE_PATH = "/tmp/top10.jpeg"
-IMAGE_LOAD_PATH = ".local/share/rhythmbox/plugins/top10/images/loading.gif"
-IMAGE_DEFAULT_PATH = ".local/share/rhythmbox/plugins/top10/images/default.jpeg"
+IMAGE_LOAD_PATH = "/home/%s.local/share/rhythmbox/plugins/top10/images/loading.gif" % os.getlogin()
+IMAGE_DEFAULT_PATH = "/home/%s.local/share/rhythmbox/plugins/top10/images/default.jpeg" % os.getlogin()
 
 
 class Load(Thread):
     ''' Class load and make the low level that is necessary '''
 
-    url = "http://lastfm.sivy.net/?do=albumForm-submit"
-
-    values = {
-        'nick':'','type':2,'period':'','count':10, 'align':1, 
-        'font':20,'font_zoom':100,'generate':'Generate', 'colortext':'0;0;0',
-        'colorbackground':'255;255;255'
-    }
-    
     def __init__(self, user, period, img_load):
         Thread.__init__(self) 
-        self.values['nick'] = user
-        self.values['period'] = period
+        self.nick = user
+        self.period = period
         self.img = img_load
 
     def run(self):
         try:
-            data = urllib.urlencode(self.values)
-            request = urllib2.Request(self.url, data)
+           do_top10_image(self.nick, self.period) 
 
-            response = urllib2.urlopen(request)
-            document = response.read()
-            soup = BeautifulSoup(document)
-
-            image = soup.find('textarea').contents[0]
-            image = image.split('[img]')[1].split('[/img]')[0]
-    
-            file_image = open(IMAGE_PATH,'wb')
-            file_image.write(urllib.urlopen(image).read())
-            file_image.close()
         except:
             pass
-
+    
         self.img.hide() 
+
 
 class Top10ConfigureDialog (GObject.Object, PeasGtk.Configurable):
     __gtype_name__ = 'Top10ConfigureDialog'
