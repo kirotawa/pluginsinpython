@@ -7,7 +7,7 @@ import os
 from threading import Thread    
 # from BeautifulSoup import BeautifulSoup
 from gi.repository import GdkPixbuf, RB, Gtk, Gio, GObject, PeasGtk
-from topimagegenerate import do_top10_image 
+from top10imagegenerate import do_top10_image 
 
 IMAGE_PATH = "/tmp/top10.jpeg"
 IMAGE_LOAD_PATH = "/home/%s/.local/share/rhythmbox/plugins/top10/images/loading.gif" % os.getlogin()
@@ -24,11 +24,8 @@ class Load(Thread):
         self.img = img_load
 
     def run(self):
-        try:
-           do_top10_image(self.nick, self.period) 
+        do_top10_image(self.nick, self.period) 
 
-        except:
-            pass
     
         self.img.hide() 
 

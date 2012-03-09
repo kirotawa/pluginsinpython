@@ -11,15 +11,15 @@ from BeautifulSoup import BeautifulSoup
 # period:  overall | 7day | 3month | 6month | 12mont
 URL = 'http://ws.audioscrobbler.com/2.0/?method=user.gettopartists&user=%s&api_key=%s&period=%s&limit=10'
 API_KEY = '344245cb8610e8490d7abd82c980d191'
-BACKGROUND = Image.open('/home/%s/.local/share/rhythmbox/plugins/top10/images/compound.jpeg' % os.getlogin()) 
 IMAGE_TEMP_PATH = '/tmp/'
-DRAW = ImageDraw.Draw(BACKGROUND)
-FONT_RANK = ImageFont.truetype("/home/%s/.local/share/rhythmbox/plugins/top10/fonts/UnBatang.ttf", 25 % os.getlogin())
-FONT_INFO = ImageFont.truetype("/home/%s/.local/share/rhythmbox/plugins/top10/fonts/UnBatang.ttf", 12 % os.getlogin())
-FONT_ARTIST = ImageFont.truetype("/home/%s/.local/share/rhythmbox/plugins/top10/fonts/UnBatang.ttf", 16 % os.getlogin())
+FONT_RANK = ImageFont.truetype("/home/%s/.local/share/rhythmbox/plugins/top10/fonts/UnBatang.ttf" % os.getlogin(), 25)
+FONT_INFO = ImageFont.truetype("/home/%s/.local/share/rhythmbox/plugins/top10/fonts/UnBatang.ttf" % os.getlogin(), 12)
+FONT_ARTIST = ImageFont.truetype("/home/%s/.local/share/rhythmbox/plugins/top10/fonts/UnBatang.ttf" % os.getlogin(), 16)
 
 
 def do_top10_image(nick, period):
+    BACKGROUND = Image.open('/home/%s/.local/share/rhythmbox/plugins/top10/images/compound.jpeg' % os.getlogin()) 
+    DRAW = ImageDraw.Draw(BACKGROUND)
 
     request = urllib2.Request(URL % (nick, API_KEY, period))
     response = urllib2.urlopen(request)
@@ -46,20 +46,23 @@ def do_top10_image(nick, period):
             reticences = ''
 
         # compouding image...   
-        file_image = open(IMAGE_TEMP_PATH+'temp.jpeg','wb') 
-        file_image.write(urllib.urlopen(image).read())
-        file_image.close()
+        # way one
+        # file_image = open(IMAGE_TEMP_PATH+'temp.jpeg','wb') 
+        # file_image.write(urllib.urlopen(image).read())
+        # file_image.close()
         
+        # way two
+        urllib.urlretrieve(image, "/tmp/temp.jpeg")
+
         temp = Image.open('/tmp/temp.jpeg')
         temp = temp.resize((50,50), Image.ANTIALIAS)
         BACKGROUND.paste(temp,(230,t_art[0] * (temp.size[0])+20))
-        DRAW.text((45, 3), "%s's top 10 artist (%s)" % (nick,period), fill=(0,0,0))#, font=FONT_INFO)
-        DRAW.text((10,t_art[0] * (temp.size[0]) + 30), str(t_art[0]+1)+'.', fill=(255,0,0), font=FONT_RANK)
-        DRAW.text((45, t_art[0]* (temp.size[0]) +37), artist_name+' '+reticences+'('+playcount+')', fill=(255,0,0), font=FONT_ARTIST)
+        DRAW.text((45, 3), "%s's top 10 artist (%s)" % (nick,period), \
+            fill=(0,0,0))#, font=FONT_INFO)
+        DRAW.text((10,t_art[0] * (temp.size[0]) + 30), str(t_art[0]+1)+'.', \
+            fill=(255,0,0), font=FONT_RANK)
+        DRAW.text((45, t_art[0]* (temp.size[0]) +37), artist_name+' '+
+            reticences+'('+playcount+')', fill=(255,0,0), font=FONT_ARTIST)
         
     BACKGROUND.save("/tmp/top10.jpeg")
-
-
-if __name__ == "__main__":
-    do_top10_image('kirotawa','overall')
 
