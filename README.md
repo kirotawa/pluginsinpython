@@ -6,7 +6,7 @@
 
     - Author: Leônidas S.B. kirotawa.
     - version: 0.1.2
-    - It does not use sivy.net.
+    - This new version does not use sivy.net more.
     - Using Lastfm API + PIL to create the image.
 
     - About: this plugin get you lastfm top10 artists and basead on a period 
@@ -16,4 +16,8 @@
 
     - Like a root type ./install.sh and enjoy!
 
+### TODO/FIXME
+    
+    - Make download image by binaries or url image more fast. By the way, it
+    does not interfere in rhythmbox player.
 
