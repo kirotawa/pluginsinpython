@@ -10,8 +10,8 @@ from gi.repository import GdkPixbuf, RB, Gtk, Gio, GObject, PeasGtk
 from top10imagegenerate import do_top10_image 
 
 IMAGE_PATH = "/tmp/top10.jpeg"
-IMAGE_LOAD_PATH = "/home/%s/.local/share/rhythmbox/plugins/top10/images/loading.gif" % os.getlogin()
-IMAGE_DEFAULT_PATH = "/home/%s/.local/share/rhythmbox/plugins/top10/images/default.jpeg" % os.getlogin()
+IMAGE_LOAD_PATH = "%s/.local/share/rhythmbox/plugins/top10/images/loading.gif" % os.environ.get('HOME')
+IMAGE_DEFAULT_PATH = "%s/.local/share/rhythmbox/plugins/top10/images/default.jpeg" % os.environ.get('HOME')
 
 
 class Load(Thread):
