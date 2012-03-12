@@ -3,7 +3,8 @@
 if [ "$UID" -ne 0 ] 
 then
     echo "Must be root to run this."
-    exit
+    # non root exit error
+    exit 87
 else
     echo "Installing..."
     sleep 3
