@@ -9,7 +9,7 @@
     - This new version does not use sivy.net more.
     - Using Lastfm API + PIL to create the image.
 
-    - About: this plugin get you lastfm top10 artists and basead on a period 
+    - About: this plugin get your lastfm top10 artists and basead on a period 
     that you chosen by yourself show a image in right side of you rhythmbox.
 
 ### How to install #
