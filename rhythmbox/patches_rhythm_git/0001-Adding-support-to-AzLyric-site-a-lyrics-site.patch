@@ -1,0 +1,156 @@
+From 42a37b52bd6bf4a49d83a6e8a98a5a7065d5644b Mon Sep 17 00:00:00 2001
+From: kirotawa <kirotawa@gmail.com>
+Date: Mon, 10 Mar 2014 22:32:06 -0300
+Subject: [PATCH] Adding support to AzLyric site, a lyrics site.
+
+
+Signed-off-by: kirotawa <kirotawa@gmail.com>
+---
+ plugins/lyrics/AzLyricsParser.py |  113 ++++++++++++++++++++++++++++++++++++++
+ plugins/lyrics/LyricsSites.py    |    4 +-
+ 2 files changed, 116 insertions(+), 1 deletion(-)
+ create mode 100644 plugins/lyrics/AzLyricsParser.py
+
+diff --git a/plugins/lyrics/AzLyricsParser.py b/plugins/lyrics/AzLyricsParser.py
+new file mode 100644
+index 0000000..5c167a0
+--- /dev/null
++++ b/plugins/lyrics/AzLyricsParser.py
+@@ -0,0 +1,113 @@
++# -*- Mode: python; coding: utf-8; tab-width: 8; indent-tabs-mode: t; -*-
++#
++# Copyright (C) 2014 Leonidas Da Silva Barbosa
++#
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 2, or (at your option)
++# any later version.
++#
++# The Rhythmbox authors hereby grant permission for non-GPL compatible
++# GStreamer plugins to be used and distributed together with GStreamer
++# and Rhythmbox. This permission is above and beyond the permissions granted
++# by the GPL license by which Rhythmbox is covered. If you modify this code
++# you may extend this exception to your version of the code, but you are not
++# obligated to do so. If you do not wish to do so, delete this exception
++# statement from your version.
++#
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with this program; if not, write to the Free Software
++# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
++
++
++import rb
++import re
++
++
++class AzLyricsParser (object):
++    def __init__(self, artist, title):
++        self.artist = artist
++        self.title = title
++        self.base_url = 'http://www.azlyrics.com/'
++        self.flag = None
++
++    def search(self, callback, *data):
++        letter = self.artist[0]+'/'
++        _base_url = self.base_url + letter
++        _artist = ('').join(self.artist.split())+'.html'
++        loader = rb.Loader()
++        print("searching for artist url: %s" % (_base_url+_artist))
++        loader.get_url (_base_url + _artist, self.get_artist_url, callback, *data)
++
++    def get_artist_url(self, artist_page, callback, *data):
++        self.flag = None
++
++        # Some artists names comes with THE as prefix, but in some lyrics site
++        # this THE is not prefixed with the name of the artist. 
++        # Bellow it clean up it.
++        if artist_page is None:
++            if self.artist[:3] == "the":
++                self.flag = True
++                letter = self.artist[4:][0]+'/'
++                _base_url = self.base_url + letter
++                _artist = self.artist[4:]
++                _artist = ('').join(_artist.split())+'.html'
++                loader = rb.Loader()
++                loader.get_url(_base_url +_artist, self.get_lyric_url, callback, *data)
++                print(_base_url + _artist)
++                return
++            else:
++                callback (None, *data)
++                return
++        # If the artist name has a THE prefix it continues 
++        self.get_lyric_url(artist_page, callback, *data)
++
++    def get_lyric_url(self, page, callback, *data):
++        if self.flag:
++            if page is None:
++                callback (None, *data)
++                return
++
++            _artist = self.artist[4:]
++
++        else:
++            _artist = self.artist
++
++
++        _artist = ('').join(_artist.split())
++        result = page.decode('utf-8')
++        if re.search('Welcome to the A-Z LYRICS UNIVERSE', result):
++            print("not found")
++            callback(None, *data)
++        elif re.search('<title>%s lyrics</title>' % self.artist.upper(), result):
++            if re.search(self.title.title(), result):
++                loader = rb.Loader()
++                # Cleaning up special characters from lyric name.
++                _lyric = re.sub("['|,|.|'|`|;|^|~|""]","",self.title)
++                _lyric = '/'+('').join(_lyric.split())+'.html'
++                _base_url = self.base_url+'lyrics/'
++                _base_url = _base_url + _artist
++                print("Getting lyric in: %s" % (_base_url+_lyric))
++                loader.get_url (_base_url + _lyric, self.get_lyric, callback, *data)
++        else:
++            callback(None, *data)
++
++    def get_lyric(self, lyric_page, callback, *data):
++        if lyric_page is None:
++            callback (None, *data)
++            return
++
++        lyric_page = lyric_page
++        source = re.split('<!-- start of lyrics -->', lyric_page)
++        source = re.split('<!-- end of lyrics -->', source[1])
++        lyric = re.sub(r'<.*?>','',source[0])
++        head = "%s - %s\n\n" % (self.artist.title(), self.title.title())
++        result = head + str (lyric)
++        result += "\n\nLyric provide by AZLyrics"
++        callback (result, *data)
++
+diff --git a/plugins/lyrics/LyricsSites.py b/plugins/lyrics/LyricsSites.py
+index d680219..b9ce49f 100644
+--- a/plugins/lyrics/LyricsSites.py
++++ b/plugins/lyrics/LyricsSites.py
+@@ -31,6 +31,7 @@ from TerraParser import TerraParser
+ from DarkLyricsParser import DarkLyricsParser
+ from JlyricParser import JlyricParser
+ from JetlyricsParser import JetlyricsParser
++from AzLyricsParser import AzLyricsParser
+ 
+ from gi.repository import RB
+ 
+@@ -43,6 +44,7 @@ lyrics_sites = [
+ 	{ 'id': 'terra.com.br',		'class': TerraParser,		'name': _("TerraBrasil (terra.com.br)")		},
+ 	{ 'id': 'darklyrics.com',	'class': DarkLyricsParser,	'name': _("Dark Lyrics (darklyrics.com)")	},
+ 	{ 'id': 'j-lyric.net', 		'class': JlyricParser, 		'name': _("Jlyric (j-lyric.net)") 		},
+-	{ 'id': 'jetlyrics.com', 	'class': JetlyricsParser, 	'name': _("Jetlyrics (jetlyrics.com)") 		}
++	{ 'id': 'jetlyrics.com', 	'class': JetlyricsParser, 	'name': _("Jetlyrics (jetlyrics.com)") 		},
++	{ 'id': 'azlyrics.com',         'class': AzLyricsParser,        'name': _("AzLyrics (azlyrics.com)")            }
+ ]
+ 
+-- 
+Leonidas S. Barbosa
+
